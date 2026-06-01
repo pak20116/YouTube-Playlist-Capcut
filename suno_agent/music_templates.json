@@ -1,0 +1,98 @@
+{
+  "genres": {
+    "K-Pop": {
+      "tags": "k-pop, korean pop, catchy, idol, bright",
+      "structure_hints": ["verse-chorus-bridge", "dance break", "rap verse"],
+      "mood_map": {
+        "upbeat": "energetic k-pop, bright synths, punchy drums, girl group",
+        "romantic": "soft k-pop ballad, emotional, piano, string arrangement",
+        "dark": "dark concept k-pop, moody, intense drop, boy group concept"
+      }
+    },
+    "Lo-fi Hip Hop": {
+      "tags": "lo-fi, hip hop, chill, relaxing, study music",
+      "structure_hints": ["looping beat", "no vocals", "ambient"],
+      "mood_map": {
+        "relaxed": "lo-fi hip hop, warm vinyl crackle, mellow piano, soft drums",
+        "focused": "lo-fi study beats, minimal, clean loop, subtle bass",
+        "rainy": "rainy day lo-fi, melancholic, jazz chords, rain ambience"
+      }
+    },
+    "EDM": {
+      "tags": "electronic, dance, edm, club, energetic",
+      "structure_hints": ["build-up", "drop", "breakdown"],
+      "mood_map": {
+        "euphoric": "progressive house, euphoric drop, bright synth lead, festival anthem",
+        "dark": "dark techno, driving beat, industrial, underground club",
+        "emotional": "melodic dubstep, emotional vocal chop, cinematic build"
+      }
+    },
+    "R&B": {
+      "tags": "r&b, soul, groove, smooth, vocal",
+      "structure_hints": ["verse-chorus", "ad-libs", "outro"],
+      "mood_map": {
+        "romantic": "smooth r&b, sultry vocals, neo-soul, gentle groove",
+        "empowering": "powerful r&b, strong female vocal, uplifting, soulful",
+        "melancholic": "sad r&b, heartbreak, vulnerable vocals, minimal production"
+      }
+    },
+    "Pop": {
+      "tags": "pop, mainstream, catchy, radio-friendly",
+      "structure_hints": ["verse-chorus-bridge", "pre-chorus", "hook"],
+      "mood_map": {
+        "upbeat": "upbeat pop, infectious hook, summer vibes, bright production",
+        "emotional": "emotional pop ballad, piano, string section, powerful chorus",
+        "indie": "indie pop, dreamy, guitar-driven, introspective"
+      }
+    },
+    "Jazz": {
+      "tags": "jazz, improvisation, swing, acoustic, sophisticated",
+      "structure_hints": ["head-solos-head", "swing feel", "call and response"],
+      "mood_map": {
+        "relaxed": "bossa nova, acoustic guitar, soft percussion, breezy",
+        "late night": "late night jazz, smoky, muted trumpet, slow groove",
+        "upbeat": "uptempo swing jazz, big band, brass section, lively"
+      }
+    },
+    "Cinematic": {
+      "tags": "cinematic, orchestral, epic, film score, atmospheric",
+      "structure_hints": ["theme-development-climax", "leitmotif", "swell"],
+      "mood_map": {
+        "epic": "epic orchestral, full strings, thunderous percussion, heroic",
+        "emotional": "emotional film score, solo piano, small ensemble, intimate",
+        "mysterious": "dark atmospheric, tension, subtle strings, eerie"
+      }
+    },
+    "Trap": {
+      "tags": "trap, hip hop, 808, hard, street",
+      "structure_hints": ["verse-hook", "adlib heavy", "808 patterns"],
+      "mood_map": {
+        "aggressive": "hard trap, heavy 808, dark melody, menacing",
+        "melodic": "melodic trap, emotional, auto-tune, introspective",
+        "hype": "hype trap, fast hi-hats, energetic, club banger"
+      }
+    }
+  },
+  "moods": [
+    "euphoric", "melancholic", "aggressive", "peaceful", "mysterious",
+    "romantic", "empowering", "nostalgic", "dreamy", "intense",
+    "playful", "dark", "uplifting", "sensual", "epic"
+  ],
+  "song_structures": {
+    "standard": "[Verse 1]\n{verse1}\n\n[Pre-Chorus]\n{prechorus}\n\n[Chorus]\n{chorus}\n\n[Verse 2]\n{verse2}\n\n[Pre-Chorus]\n{prechorus}\n\n[Chorus]\n{chorus}\n\n[Bridge]\n{bridge}\n\n[Chorus]\n{chorus}",
+    "simple": "[Verse]\n{verse}\n\n[Chorus]\n{chorus}\n\n[Verse]\n{verse2}\n\n[Chorus]\n{chorus}",
+    "instrumental": "[Intro]\n[Main Theme]\n[Build]\n[Drop]\n[Breakdown]\n[Drop]\n[Outro]",
+    "ballad": "[Verse 1]\n{verse1}\n\n[Chorus]\n{chorus}\n\n[Verse 2]\n{verse2}\n\n[Chorus]\n{chorus}\n\n[Bridge]\n{bridge}\n\n[Final Chorus]"
+  },
+  "vocal_styles": [
+    "female vocal", "male vocal", "mixed vocals", "rap", "harmonies",
+    "falsetto", "deep baritone", "soprano", "auto-tune", "choir",
+    "no vocals (instrumental)", "whisper", "belt"
+  ],
+  "tempo_tags": {
+    "slow": "slow tempo, 60-80 BPM",
+    "medium": "medium tempo, 90-110 BPM",
+    "fast": "fast tempo, 120-140 BPM",
+    "very_fast": "uptempo, 150+ BPM"
+  }
+}

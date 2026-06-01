@@ -1,0 +1,16 @@
+# Suno Agent 의존성
+
+# Claude API (프롬프트 자동 생성)
+anthropic>=0.40.0
+
+# HTTP 요청 (suno-api 클라이언트)
+requests>=2.31.0
+
+# 환경변수 로딩
+python-dotenv>=1.0.0
+
+# 브라우저 자동화 (폴백 방식)
+playwright>=1.47.0
+
+# 설치 후 브라우저 바이너리 설치 필요:
+#   playwright install chromium
