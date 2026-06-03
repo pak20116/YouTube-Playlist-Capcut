@@ -1,0 +1,9 @@
+{
+  "genre": "piano pop, modern acoustic pop, minimalist piano pop, soul café groove, acoustic jazz folk, singer-song writer pop, café swing pop, ambient acoustic pop, ambient soft jazz pop, light jazz pop, soft R&B, bossa nova",
+  "mood": "it features a [medium tempo] and a [uplifting with bright smooth groove, calm optimism mood, soft joy and glowing comfort, fresh, cheerful and airy, tender creativity and gentle momentum, refreshing reset mood, breezy and elegant, bright and relaxed, light happiness, smooth confidence and cozy elegance, Laid-back reset with sunny morning warmth, sunny, refreshing, and gently uplifting, Intimate comfort and relaxed connection, Locked-in productivity and rhythm, mellow beat], set in a major key",
+  "structure": "[intro hook] [verse] [pre-chorus] [chorus] [verse 2] [pre-chrous] [chorus] [bridge] [outro]",
+  "extra_instructions": "Create 15 English songs, mix with male, female, and male-female duet, medium tempo",
+  "count": 10,
+  "gen_mode": "both",
+  "submit_mode": "both"
+}

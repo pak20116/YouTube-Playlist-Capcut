@@ -27,19 +27,19 @@ from pathlib import Path
 # ─────────────────────────────────────────────
 
 # 음악 파일이 있는 폴더 경로
-MUSIC_FOLDER = r"C:\Users\pak20\Music"
+MUSIC_FOLDER = r"C:\Users\Sung\YouTube-Playlist\Contents\0601"
 
 # 배경 이미지 폴더 경로 (없으면 None으로 설정)
-IMAGES_FOLDER = r"C:\Users\pak20\Images"  # 또는 None
+IMAGES_FOLDER = r"C:\Users\Sung\YouTube-Playlist\Contents\0601"  # 또는 None
 
 # CapCut 초안 폴더 경로
 # 보통 아래 경로 중 하나입니다:
 #   Windows: C:\Users\<이름>\AppData\Local\CapCut\User Data\Projects\com.lveditor.draft
 #   또는 설정 > 초안 위치에서 확인하세요
-CAPCUT_DRAFTS_FOLDER = r"C:\Users\pak20\AppData\Local\CapCut\User Data\Projects\com.lveditor.draft"
+CAPCUT_DRAFTS_FOLDER = r"C:\Users\Sung\AppData\Local\CapCut\User Data\Projects\com.lveditor.draft"
 
 # 생성할 초안 이름
-DRAFT_NAME = "Music Compilation"
+DRAFT_NAME = "Music Compilation2"
 
 # 영상 해상도
 VIDEO_WIDTH  = 1920
@@ -182,7 +182,12 @@ def build_capcut_draft(songs: list[dict], images: list[str]):
     print(f"📝 초안 이름: {DRAFT_NAME}\n")
 
     draft_folder = cc.DraftFolder(CAPCUT_DRAFTS_FOLDER)
-    script = draft_folder.create_draft(DRAFT_NAME, VIDEO_WIDTH, VIDEO_HEIGHT)
+    try:
+        script = draft_folder.create_draft(DRAFT_NAME, VIDEO_WIDTH, VIDEO_HEIGHT, allow_replace=True)
+    except PermissionError:
+        print(f"❌ '{DRAFT_NAME}' 초안 폴더를 덮어쓸 수 없습니다.")
+        print("   CapCut 프로그램이 켜져 있다면 종료하거나, CapCut 홈 화면(프로젝트 목록)으로 이동해 해당 프로젝트 사용을 중단한 뒤 다시 실행해 주세요.")
+        sys.exit(1)
 
     # 트랙 생성 (배경 → 오디오 → 텍스트 순서)
     script.add_track(cc.TrackType.video, "background")
@@ -206,8 +211,8 @@ def build_capcut_draft(songs: list[dict], images: list[str]):
             audio_seg = cc.AudioSegment(
                 song['path'],
                 cc.Timerange(current_us, duration_us),
-                fade_out=fade_out_us,
             )
+            audio_seg.add_fade(0, fade_out_us)
             script.add_segment(audio_seg, "music")
         except Exception as e:
             print(f"         ⚠️  오디오 추가 실패: {e}")
@@ -283,39 +288,48 @@ def generate_song_list_docx(songs: list[dict], output_path: str):
 
     doc.add_paragraph()  # 빈 줄
 
-    # 표 생성
-    table = doc.add_table(rows=1, cols=4)
-    table.style = 'Table Grid'
-
-    # 헤더
-    hdr_cells = table.rows[0].cells
-    headers = ['#', '파일명', '제목', '길이']
-    for i, h_text in enumerate(headers):
-        cell = hdr_cells[i]
-        cell.text = h_text
-        run = cell.paragraphs[0].runs[0]
-        run.bold = True
-
-    # 데이터 행
+    # 노래 목록 생성 (예: 00:00  01. Rain on the Window)
+    current_time_secs = 0.0
     for i, song in enumerate(songs):
-        secs = song['duration_secs']
-        mins = int(secs // 60)
-        secs_rem = int(secs % 60)
-        row_cells = table.add_row().cells
-        row_cells[0].text = str(i + 1)
-        row_cells[1].text = song['filename']
-        row_cells[2].text = song['title']
-        row_cells[3].text = f"{mins}:{secs_rem:02d}"
+        h, m = divmod(int(current_time_secs), 3600)
+        m, s = divmod(m, 60)
+        if h > 0:
+            start_time_str = f"{h}:{m:02d}:{s:02d}"
+        else:
+            start_time_str = f"{m:02d}:{s:02d}"
 
-    # 열 너비 조정 (간단히 비율로)
-    from docx.shared import Inches
-    widths = [Inches(0.4), Inches(2.5), Inches(2.5), Inches(0.8)]
-    for row in table.rows:
-        for idx, cell in enumerate(row.cells):
-            cell.width = widths[idx]
+        line_text = f"{start_time_str}  {i + 1:02d}. {song['title']}"
+        p_line = doc.add_paragraph()
+        p_line.paragraph_format.space_before = Pt(0)
+        p_line.paragraph_format.space_after = Pt(2)
+        p_line.paragraph_format.line_spacing = 1.15
+        
+        run = p_line.add_run(line_text)
+        run.font.name = 'Consolas'
+        run.font.size = Pt(11)
 
-    doc.save(output_path)
-    print(f"📄 노래 목록 문서 저장: {output_path}\n")
+        # 다음 노래의 시작 시간 계산 (재생 시간 + 간격)
+        current_time_secs += song['duration_secs'] + GAP_SECONDS
+
+    try:
+        doc.save(output_path)
+        print(f"📄 노래 목록 문서 저장: {output_path}\n")
+    except PermissionError:
+        print(f"⚠️  {output_path} 파일이 다른 프로그램(예: Word)에서 열려 있어 저장할 수 없습니다.")
+        # 대안 파일명으로 저장 시도
+        base_path = Path(output_path)
+        saved_alt = False
+        for i in range(1, 100):
+            alt_path = base_path.with_name(f"{base_path.stem}_{i}{base_path.suffix}")
+            try:
+                doc.save(str(alt_path))
+                print(f"📄 노래 목록 문서가 다른 이름으로 저장되었습니다: {alt_path}\n")
+                saved_alt = True
+                break
+            except PermissionError:
+                continue
+        if not saved_alt:
+            print("❌ 노래 목록 문서를 저장할 수 없었습니다.\n")
 
 
 # ─────────────────────────────────────────────
