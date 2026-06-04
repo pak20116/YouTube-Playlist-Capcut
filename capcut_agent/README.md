@@ -19,14 +19,18 @@ pip install -r requirements.txt
 
 ## 설정
 
-`capcut_music_editor.py` 파일 상단의 **CONFIG 섹션**을 수정하세요:
+로컬 환경 설정 파일(`.env`)을 통해 경로 및 설정을 수정할 수 있습니다.
 
-```python
-MUSIC_FOLDER        = r"C:\Users\...\Music"       # 음악 파일 폴더
-IMAGES_FOLDER       = r"C:\Users\...\Images"      # 배경 이미지 폴더 (없으면 None)
-CAPCUT_DRAFTS_FOLDER = r"C:\Users\...\com.lveditor.draft"  # CapCut 초안 폴더
-DRAFT_NAME          = "Music Compilation"          # 생성할 초안 이름
-```
+1. `capcut_agent` 폴더 내에 있는 `.env.example` 파일을 복사하여 `.env` 파일을 생성합니다.
+2. 생성한 `.env` 파일을 편집기에서 열어 환경변수 값을 본인의 경로와 초안 이름에 맞게 수정합니다:
+   ```env
+   MUSIC_FOLDER=C:\Users\Sung\YouTube-Playlist\Contents\0604
+   IMAGES_FOLDER=C:\Users\Sung\YouTube-Playlist\Contents\0604
+   CAPCUT_DRAFT_FOLDER=C:\Users\Sung\AppData\Local\CapCut\User Data\Projects\com.lveditor.draft
+   DRAFT_NAME=Girl Smile4
+   ```
+
+*참고: `.env` 파일은 Git에 의해 추적되지 않으므로 개별 환경설정 사항이 Git에 커밋되지 않습니다.*
 
 ### CapCut 초안 폴더 찾기
 

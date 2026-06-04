@@ -23,23 +23,47 @@ import sys
 from pathlib import Path
 
 # ─────────────────────────────────────────────
-#  CONFIG — 여기서 경로를 설정하세요
+#  CONFIG — 로컬 환경 변수 (.env) 설정 로드
 # ─────────────────────────────────────────────
 
+def load_local_env():
+    """.env 파일에서 환경변수를 로드합니다. (python-dotenv 패키지가 없으면 직접 파싱)"""
+    env_path = Path(__file__).parent / ".env"
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(env_path)
+    except ImportError:
+        if env_path.exists():
+            with open(env_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        continue
+                    if "=" in line:
+                        key, val = line.split("=", 1)
+                        key = key.strip()
+                        val = val.strip()
+                        # 따옴표 제거
+                        if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
+                            val = val[1:-1]
+                        os.environ[key] = val
+
+# 환경변수 로드 실행
+load_local_env()
+
 # 음악 파일이 있는 폴더 경로
-MUSIC_FOLDER = r"C:\Users\Sung\YouTube-Playlist\Contents\0601"
+MUSIC_FOLDER = os.getenv("MUSIC_FOLDER", r"C:\Users\Sung\YouTube-Playlist\Contents\0604")
 
 # 배경 이미지 폴더 경로 (없으면 None으로 설정)
-IMAGES_FOLDER = r"C:\Users\Sung\YouTube-Playlist\Contents\0601"  # 또는 None
+_images_env = os.getenv("IMAGES_FOLDER", r"C:\Users\Sung\YouTube-Playlist\Contents\0604")
+IMAGES_FOLDER = None if _images_env in (None, "", "None", "null") else _images_env
 
 # CapCut 초안 폴더 경로
-# 보통 아래 경로 중 하나입니다:
-#   Windows: C:\Users\<이름>\AppData\Local\CapCut\User Data\Projects\com.lveditor.draft
-#   또는 설정 > 초안 위치에서 확인하세요
-CAPCUT_DRAFTS_FOLDER = r"C:\Users\Sung\AppData\Local\CapCut\User Data\Projects\com.lveditor.draft"
+# CAPCUT_DRAFT_FOLDER 및 CAPCUT_DRAFTS_FOLDER 모두 지원
+CAPCUT_DRAFTS_FOLDER = os.getenv("CAPCUT_DRAFT_FOLDER") or os.getenv("CAPCUT_DRAFTS_FOLDER") or r"C:\Users\Sung\AppData\Local\CapCut\User Data\Projects\com.lveditor.draft"
 
 # 생성할 초안 이름
-DRAFT_NAME = "Music Compilation2"
+DRAFT_NAME = os.getenv("DRAFT_NAME", "Girl Smile4")
 
 # 영상 해상도
 VIDEO_WIDTH  = 1920
