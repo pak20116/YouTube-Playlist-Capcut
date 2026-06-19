@@ -305,7 +305,8 @@ def build_capcut_draft(songs: list[dict], images: list[str]):
                     media = video_media[vid_idx % len(video_media)]
                     vid_duration_secs = media.get('duration_secs')
                     if vid_duration_secs and vid_duration_secs > 0:
-                        clip_unit_us = int(vid_duration_secs * SEC)
+                        # mutagen duration과 pycapcut 내부 길이 간 미세 오차 보정 (-200ms 마진)
+                        clip_unit_us = max(1, int(vid_duration_secs * SEC) - 200_000)
                     else:
                         clip_unit_us = bg_clip_us  # 길이 정보 없으면 기본값 사용
                     clip_dur_us = min(clip_unit_us, remaining_us)
@@ -317,9 +318,8 @@ def build_capcut_draft(songs: list[dict], images: list[str]):
                             media['path'],
                             cc.Timerange(seg_start_us, clip_dur_us),
                         )
-                        # 마지막 클립이 아니면 fade out 적용 (다음 영상으로 넘어갈 때)
-                        if not is_last_clip and clip_dur_us > bg_fade_us:
-                            bg_seg.add_fade(0, bg_fade_us)
+                        # 주의: pycapcut VideoSegment는 add_fade를 지원하지 않음
+                        # 영상 전환은 클립이 연속 배치되는 방식으로 처리됨
                         script.add_segment(bg_seg, "background")
                     except Exception as e:
                         print(f"         ⚠️  배경 {media_label} 추가 실패: {e}")
